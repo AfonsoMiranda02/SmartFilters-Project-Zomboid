@@ -1,35 +1,13 @@
 SmartFilter = SmartFilter or {}
 
--- =========================================================================
--- FUNÇÃO PARA AGRUPAR CATEGORIAS COMPLEXAS EM GRUPOS SIMPLES (Aguardando uso)
--- =========================================================================
---[[
-SmartFilter.simplifyCategory = function(catID)
-    if not catID then return "Other" end
-    local lowerCat = string.lower(catID)
-    
-    -- Agrupamentos Inteligentes:
-    if string.find(lowerCat, "fishing") then return "Fishing" end
-    if string.find(lowerCat, "weapon") or string.find(lowerCat, "ammo") or string.find(lowerCat, "firearm") then return "Weapons" end
-    if string.find(lowerCat, "food") or string.find(lowerCat, "cooking") then return "Food" end
-    if string.find(lowerCat, "firstaid") or string.find(lowerCat, "medical") or string.find(lowerCat, "pill") then return "Medical" end
-    if string.find(lowerCat, "clothing") or string.find(lowerCat, "appearance") or string.find(lowerCat, "accessory") or string.find(lowerCat, "shoes") then return "Clothing" end
-    if string.find(lowerCat, "bag") or string.find(lowerCat, "container") then return "Containers" end
-    if string.find(lowerCat, "literature") or string.find(lowerCat, "book") or string.find(lowerCat, "map") or string.find(lowerCat, "cartography") then return "Literature" end
-    if string.find(lowerCat, "animal") or string.find(lowerCat, "bear") or string.find(lowerCat, "beaver") or string.find(lowerCat, "badger") or string.find(lowerCat, "deer") or string.find(lowerCat, "rabbit") then return "Animals" end
-    if string.find(lowerCat, "tool") or string.find(lowerCat, "welding") or string.find(lowerCat, "gardening") then return "Tools" end
-    if string.find(lowerCat, "material") or string.find(lowerCat, "junk") or string.find(lowerCat, "scrap") then return "Materials" end
-    
-    -- Se não for nenhum dos acima, mostra o nome original
-    return catID
-end
-]]--
-
--- Proteção: Guardamos a função original apenas uma vez
 if not SmartFilter.original_onFilterMenu then
     SmartFilter.original_onFilterMenu = ISInventoryPane.onFilterMenu
 end
 
+-- =========================================================================
+-- [ISContextMenu Hook] Prevents the context menu from closing when 
+-- clicking on toggle options like ON/OFF for Highlights.
+-- =========================================================================
 if not SmartFilter.original_ISContextMenu_onMouseUp then
     SmartFilter.original_ISContextMenu_onMouseUp = ISContextMenu.onMouseUp
     function ISContextMenu:onMouseUp(x, y)
@@ -53,45 +31,39 @@ if not SmartFilter.original_ISContextMenu_onMouseUp then
                         end
                     end
                 end
-                return -- Não fecha o menu!
+                return
             end
         end
         SmartFilter.original_ISContextMenu_onMouseUp(self, x, y)
     end
 end
 
+-- =========================================================================
+-- [Menu Injection] Injects the custom Filter menus into the vanilla 
+-- Zomboid Inventory Context Menu.
+-- =========================================================================
 function ISInventoryPane:onFilterMenu(button)
-    -- Chama a função original que cria o menu e adiciona as opções nativas ("Encumbrance")
     SmartFilter.original_onFilterMenu(self, button)
     
-    -- Como a função original não retorna o context, nós "apanhamo-lo" logo a seguir!
     local context = getPlayerContextMenu(self.player)
     
-    -- Injetamos as nossas opções no menu que já foi criado
     if context then
         
-        -- 1. Cria o submenu principal "Filter"
         local filterSubMenu = ISContextMenu:getNew(context)
         context:addSubMenu(context:addOption("Filter", nil, nil), filterSubMenu)
         
-        -- 2. Cria o submenu "Zomboid" dentro do "Filter"
         local zomboidSubMenu = ISContextMenu:getNew(filterSubMenu)
         filterSubMenu:addSubMenu(filterSubMenu:addOption("Zomboid", nil, nil), zomboidSubMenu)
         
-        -- 3. Cria o submenu "Player" dentro do "Filter" (para usarmos mais tarde)
         local playerSubMenu = ISContextMenu:getNew(filterSubMenu)
         filterSubMenu:addSubMenu(filterSubMenu:addOption("Player", nil, nil), playerSubMenu)
 
-        -- 4. Botão simples para limpar o filtro
         filterSubMenu:addOption("Clear Filters", self, SmartFilter.applyFilter, "All")
 
-        -- A) Botão direto para criar (Abre SmartFilterCreatorUI)
         playerSubMenu:addOption("Create a New Filter", nil, SmartFilter.openCreatorUI, nil)
         
-        -- B) Botão direto para gerir (Abre SmartFilterManagerUI)
         playerSubMenu:addOption("Edit a Filter", nil, SmartFilter.openManagerUI, nil)
         
-        -- C) Submenu Highlights (Para ligar/desligar cores)
         local highlightsSubMenu = ISContextMenu:getNew(playerSubMenu)
         playerSubMenu:addSubMenu(playerSubMenu:addOption("Highlights", nil, nil), highlightsSubMenu)
         
@@ -128,9 +100,8 @@ function ISInventoryPane:onFilterMenu(button)
         -- Adicionamos as opções na aba do Zomboid!
         zomboidSubMenu:addOption("All", self, SmartFilter.applyFilter, "All")
         
-        -- [NOVIDADE] Construção Dinâmica de Categorias!
-        -- Em vez de escrevermos 100+ categorias à mão, o mod vai ler os itens que estão 
-        -- ATUALMENTE no inventário e criar botões apenas para o que lá existe.
+        -- [Dynamic Categories] Reads the current inventory and dynamically 
+        -- generates filter options based only on what the player actually has.
         local uniqueCategories = {}
         local items = self.inventory:getItems()
         
@@ -198,7 +169,8 @@ function SmartFilter.applyFilter(target, filterTypeOrData)
 end
 
 -- =========================================================================
--- O SISTEMA DE HIGHLIGHT PERMANENTE
+-- [Highlight System] Intercepts the rendering of inventory items to 
+-- draw custom colored backgrounds behind items that match active filters.
 -- =========================================================================
 if not SmartFilter.original_render then
     SmartFilter.original_render = ISInventoryPane.render
@@ -303,7 +275,8 @@ function SmartFilter.deleteFilter(target, filterName, pane)
 end
 
 -- =========================================================================
--- O SEGREDO DO FILTRO: Esconder os itens que não queremos!
+-- [Filter Logic] Hooks into refreshContainer to hide items that do not 
+-- match the currently active smart filter or search bar text.
 -- =========================================================================
 if not SmartFilter.original_refreshContainer then
     SmartFilter.original_refreshContainer = ISInventoryPane.refreshContainer
@@ -381,7 +354,8 @@ function ISInventoryPane:refreshContainer()
 end
 
 -- =========================================================================
--- INJEÇÃO DA BARRA DE PESQUISA (Search Bar) NA INTERFACE
+-- [Search Bar Injection] Injects a text entry box into the inventory header
+-- to allow real-time item searching by name or ID.
 -- =========================================================================
 if not SmartFilter.original_ISInventoryPage_createChildren then
     SmartFilter.original_ISInventoryPage_createChildren = ISInventoryPage.createChildren
