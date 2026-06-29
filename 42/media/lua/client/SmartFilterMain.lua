@@ -90,14 +90,12 @@ function ISInventoryPane:onFilterMenu(button)
             end
         end
 
-        -- D) Filtros criados pelo jogador prontos a aplicar
         if modData.SmartFilters then
             for fName, fData in pairs(modData.SmartFilters) do
                 playerSubMenu:addOption(fName, self, SmartFilter.applyFilter, fData)
             end
         end
 
-        -- Adicionamos as opções na aba do Zomboid!
         zomboidSubMenu:addOption("All", self, SmartFilter.applyFilter, "All")
         
         -- [Dynamic Categories] Reads the current inventory and dynamically 
@@ -110,14 +108,10 @@ function ISInventoryPane:onFilterMenu(button)
             local fullCat = item:getDisplayCategory() or item:getCategory()
             
             if fullCat then
-                -- O Zomboid junta categorias com "/" (ex: "Weapon/Fishing")
                 for catID in string.gmatch(fullCat, "[^/]+") do
                     catID = catID:match("^%s*(.-)%s*$")
                     
                     if catID ~= "" then
-                        -- Agrupamento inteligente de categorias: se o nome da categoria contiver
-                        -- uma destas palavras-chave principais, agrupamos tudo na palavra-chave.
-                        -- Exemplo: "WaterContainer" -> "Container", "Melee Weapon" -> "Weapon"
                         local baseCat = catID
                         local masterGroups = {"Weapon", "Container", "Clothing", "Food", "Literature", "Bag", "Tool", "Ammo"}
                         
@@ -136,14 +130,12 @@ function ISInventoryPane:onFilterMenu(button)
             end
         end
         
-        -- Ordenar as categorias alfabeticamente para o menu ficar bonito
         local sortedCatIDs = {}
         for catID, _ in pairs(uniqueCategories) do
             table.insert(sortedCatIDs, catID)
         end
         table.sort(sortedCatIDs, function(a, b) return uniqueCategories[a] < uniqueCategories[b] end)
         
-        -- Adicionar as opções geradas dinamicamente ao menu do ZOMBOID
         for _, catID in ipairs(sortedCatIDs) do
             zomboidSubMenu:addOption(uniqueCategories[catID], self, SmartFilter.applyFilter, catID)
         end
@@ -155,7 +147,6 @@ function SmartFilter.applyFilter(target, filterTypeOrData)
     local inventoryPane = target
     if not inventoryPane or not inventoryPane.inventory then return end
     
-    -- Verifica se recebemos uma string (Zomboid) ou uma tabela de dados (Player Filter)
     if type(filterTypeOrData) == "table" then
         inventoryPane.smartFilterActive = filterTypeOrData.name
         inventoryPane.smartFilterData = filterTypeOrData
@@ -164,7 +155,6 @@ function SmartFilter.applyFilter(target, filterTypeOrData)
         inventoryPane.smartFilterData = nil
     end
     
-    -- Forçamos a UI a atualizar a lista de itens!
     inventoryPane:refreshContainer()
 end
 
@@ -177,7 +167,6 @@ if not SmartFilter.original_render then
 end
 
 function ISInventoryPane:render()
-    -- Precisamos saber se há filtros ativos antes de desenhar
     local modData = getPlayer():getModData()
     local activeFilters = {}
     
@@ -189,7 +178,6 @@ function ISInventoryPane:render()
         end
     end
     
-    -- Desenha os nossos highlights PRIMEIRO (por trás de tudo)
     if #activeFilters > 0 then
         local y = 0
         for k, v in ipairs(self.itemslist) do
@@ -207,7 +195,6 @@ function ISInventoryPane:render()
         end
     end
     
-    -- Chama o original POR ÚLTIMO (desenha o texto, ícones e sombreados originais POR CIMA das nossas cores!)
     if SmartFilter.original_render then
         SmartFilter.original_render(self)
     end
@@ -248,9 +235,7 @@ function ISInventoryPane:checkAndDrawHighlight(item, y, activeFilters)
         local top = self.headerHgt + y * self.itemHgt
         local screenY = top + self:getYScroll()
         
-        -- Apenas desenhar se estiver visível na janela
         if screenY + self.itemHgt > 0 and screenY < self.height then
-            -- Opacidade reduzida para 0.25 para não carregar tanto visualmente
             self:drawRect(1, top, self.column4 or self:getWidth() - 2, self.itemHgt, 0.25, highlightColor.r, highlightColor.g, highlightColor.b)
         end
     end
@@ -283,10 +268,8 @@ if not SmartFilter.original_refreshContainer then
 end
 
 function ISInventoryPane:refreshContainer()
-    -- 1. Deixamos o jogo carregar e ordenar TODOS os itens normalmente
     SmartFilter.original_refreshContainer(self)
     
-    -- 2. Se houver um filtro ativo ou uma pesquisa de texto
     local hasFilter = (self.smartFilterActive and self.smartFilterActive ~= "All")
     local hasSearch = (self.smartSearchText and self.smartSearchText ~= "")
     
@@ -294,20 +277,17 @@ function ISInventoryPane:refreshContainer()
         local filteredList = {}
         local searchText = hasSearch and string.lower(self.smartSearchText) or ""
         
-        -- 3. Percorremos a lista de pilhas de itens (stacks) que o jogo gerou
         for i, stack in ipairs(self.itemslist) do
-            -- stack.items[1] é sempre um item válido dessa pilha
             local item = stack.items[1]
             
             if item then
                 local itemCat = item:getDisplayCategory() or item:getCategory()
-                local itemID = item:getFullType() -- ex: Base.Axe
+                local itemID = item:getFullType()
                 local itemName = string.lower(item:getName())
                 
                 local matchesFilter = not hasFilter
                 local matchesSearch = not hasSearch
                 
-                -- Verifica Filtros de Categoria/Itens
                 if hasFilter then
                     if self.smartFilterData then
                         local data = self.smartFilterData
@@ -335,7 +315,6 @@ function ISInventoryPane:refreshContainer()
                     end
                 end
                 
-                -- Verifica Pesquisa de Texto
                 if hasSearch then
                     if string.find(itemName, searchText, 1, true) or (itemID and string.find(string.lower(itemID), searchText, 1, true)) then
                         matchesSearch = true
@@ -348,7 +327,6 @@ function ISInventoryPane:refreshContainer()
             end
         end
         
-        -- 4. Substituímos a lista mostrada pela nossa lista filtrada!
         self.itemslist = filteredList
     end
 end
@@ -364,23 +342,18 @@ end
 function ISInventoryPage:createChildren()
     SmartFilter.original_ISInventoryPage_createChildren(self)
     
-    -- Calcular a largura do texto do título (ex: "Inventory" ou "Loot")
     local titleWidth = getTextManager():MeasureStringX(UIFont.Small, self.title or "Inventory")
     local fontHgt = getTextManager():getFontHeight(UIFont.Small)
     local buttonHeight = math.max(16, fontHgt + 1) - 2
     local buttonOffset = 1 + (5 - getCore():getOptionFontSizeReal()) * 2
     
-    -- Posição: Encostado ao botão de informação (i)
     local startX = (self.infoButton and self.infoButton:getRight() or 0) + buttonOffset + 5
     
-    -- Se for o inventário do jogador (onCharacter), o Zomboid escreve "Inventory" ou a capacidade,
-    -- por isso damos um avanço para não sobrepor o texto!
     if self.onCharacter then
         local titleWidth = getTextManager():MeasureStringX(UIFont.Small, self.title or "Inventory")
         startX = startX + titleWidth + 10
     end
     
-    -- Ícone de Lupa do Zomboid
     local iconTex = getTexture("media/ui/Search_Icon_Off.png")
     self.smartSearchIcon = ISImage:new(startX, 1, buttonHeight, buttonHeight, iconTex)
     self.smartSearchIcon:initialise()
@@ -398,7 +371,6 @@ function ISInventoryPage:createChildren()
     self.smartSearchBar:initialise()
     self.smartSearchBar:instantiate()
     
-    -- Quando o texto muda, atualiza a lista de itens instantaneamente
     self.smartSearchBar.onTextChange = function(entry)
         if self.inventoryPane then
             self.inventoryPane.smartSearchText = entry:getText()

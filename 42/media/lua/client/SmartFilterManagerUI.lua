@@ -13,7 +13,7 @@ function SmartFilterManagerUI:createChildren()
     local fontHeight = getTextManager():getFontHeight(UIFont.Small)
     local titleHeight = getTextManager():getFontHeight(UIFont.Medium)
     
-    -- Título
+    -- [Title Label]
     self.titleLabel = ISLabel:new(self.width / 2, margin, titleHeight, "Edit Filters", 1, 1, 1, 1, UIFont.Medium, true)
     self.titleLabel.center = true
     self:addChild(self.titleLabel)
@@ -21,7 +21,7 @@ function SmartFilterManagerUI:createChildren()
     local listY = margin * 2 + titleHeight
     local listHeight = self.height - listY - btnHeight - margin * 2
     
-    -- Lista de Filtros
+    -- [Filter List]
     self.filterList = ISScrollingListBox:new(margin, listY, self.width - margin*2, listHeight)
     self.filterList:initialise()
     self.filterList:instantiate()
@@ -33,7 +33,7 @@ function SmartFilterManagerUI:createChildren()
     
     self:populateList()
     
-    -- Botões
+    -- [Action Buttons]
     local btnY = self.height - btnHeight - margin
     local btnWidth = 80
     
@@ -127,7 +127,7 @@ function SmartFilterManagerUI:new(x, y, width, height)
 end
 
 -- =========================================================================
--- FUNÇÃO GLOBAL PARA ABRIR A UI
+-- [Global Function] Opens the Manager UI
 -- =========================================================================
 function SmartFilter.openManagerUI()
     local ui = SmartFilterManagerUI:new(getCore():getScreenWidth()/2 - 150, getCore():getScreenHeight()/2 - 200, 300, 400)

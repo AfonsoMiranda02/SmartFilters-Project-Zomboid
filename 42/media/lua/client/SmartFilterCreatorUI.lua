@@ -174,7 +174,7 @@ function SmartFilterCreatorUI:createChildren()
     self.btnCancel:instantiate()
     self:addChild(self.btnCancel)
     
-    -- A Dropdown List tem de ser adicionada no fim para desenhar POR CIMA das outras coisas!
+    -- Dropdown list must be added last to draw ON TOP of other elements!
     self.searchDropdown = ISScrollingListBox:new(margin, self.itemsEntry:getY() + self.itemsEntry:getHeight(), searchWidth, 160)
     self.searchDropdown:initialise()
     self.searchDropdown:instantiate()
@@ -199,7 +199,7 @@ function SmartFilterCreatorUI:createChildren()
     self:populateCategories()
     
     -- -------------------------------------------------------------------------
-    -- EDIT MODE: Pre-carregar dados se estivermos a editar
+    -- EDIT MODE: Preload data if editing
     -- -------------------------------------------------------------------------
     if self.editFilterName then
         local modData = getPlayer():getModData()
@@ -207,7 +207,7 @@ function SmartFilterCreatorUI:createChildren()
         if fData then
             self.nameEntry:setText(self.editFilterName)
             if fData.specificItems and fData.specificItems ~= "" then
-                -- O specificItems era guardado como "Base.Axe, Base.Apple"
+                -- specificItems was saved as "Base.Axe, Base.Apple"
                 for itemID in string.gmatch(fData.specificItems, "([^,]+)") do
                     itemID = itemID:match("^%s*(.-)%s*$")
                     local scriptItem = getScriptManager():getItem(itemID)
@@ -225,10 +225,10 @@ function SmartFilterCreatorUI:createChildren()
                 self.btnColor.backgroundColor = {r = fData.highlightColor.r, g = fData.highlightColor.g, b = fData.highlightColor.b, a = 1}
             end
             
-            -- Mover as categorias selecionadas da esquerda para a direita
+            -- Move selected categories from left to right
             if fData.categories then
                 for _, cat in ipairs(fData.categories) do
-                    -- Encontrar na lista da esquerda
+                    -- Find in the left list
                     for i, item in ipairs(self.availableList.items) do
                         if item.item == cat then
                             self.selectedList:addItem(item.text, item.item)
@@ -239,14 +239,14 @@ function SmartFilterCreatorUI:createChildren()
                 end
             end
             
-            -- Guardamos o estado antigo do highlightActive para nÃ£o perder
+            -- Save old highlightActive state to prevent lossÃ£o perder
             self.oldHighlightActive = fData.highlightActive
         end
     end
 end
 
 function SmartFilterCreatorUI:populateCategories()
-    -- Preenche a lista da esquerda com todas as categorias do jogo
+    -- Populate left list with all game categories
     local uniqueCategories = {}
     local player = getPlayer()
     local inventory = player:getInventory()
@@ -294,7 +294,7 @@ function SmartFilterCreatorUI:populateCategories()
 end
 
 function SmartFilterCreatorUI:drawListItem(y, item, alt)
-    -- O 'self' aqui dentro Ã© a ISScrollingListBox e nÃ£o o SmartFilterCreatorUI
+    -- O 'self' in here is Ã© a ISScrollingListBox e nÃ£o o SmartFilterCreatorUI
     local isSelected = self.selected == item.itemindex
     
     if isSelected then
@@ -307,7 +307,7 @@ function SmartFilterCreatorUI:drawListItem(y, item, alt)
     local textHeight = getTextManager():getFontHeight(self.font)
     local textY = y + (item.height - textHeight) / 2
     
-    -- Texto desenhado com margem de 10 pixels Ã  esquerda para nÃ£o colar Ã  borda
+    -- Text drawn with 10px left margin Ã  esquerda para nÃ£o colar Ã  borda
     self:drawText(item.text, 10, textY, 1, 1, 1, 1, self.font)
     
     return y + item.height
@@ -318,10 +318,10 @@ function SmartFilterCreatorUI:onClickAdd()
     local selectedItem = self.availableList.items[selectedIndex]
     if not selectedItem then return end
     
-    -- Adiciona Ã  lista da direita
+    -- Add Ã  lista da direita
     self.selectedList:addItem(selectedItem.text, selectedItem.item)
     
-    -- Remove da lista da esquerda
+    -- Remove from list da esquerda
     self.availableList:removeItemByIndex(selectedIndex)
     
     -- MantÃ©m a seleÃ§Ã£o no item que subiu para ocupar o lugar
@@ -337,13 +337,13 @@ function SmartFilterCreatorUI:onClickRemove()
     local selectedItem = self.selectedList.items[selectedIndex]
     if not selectedItem then return end
     
-    -- Adiciona de volta Ã  lista da esquerda
+    -- Add de volta Ã  lista da esquerda
     self.availableList:addItem(selectedItem.text, selectedItem.item)
     
-    -- Ordena a lista da esquerda alfabeticamente para ficar arrumada
+    -- Sort list da esquerda alfabeticamente para ficar arrumada
     table.sort(self.availableList.items, function(a, b) return a.text < b.text end)
     
-    -- Remove da lista da direita
+    -- Remove from list da direita
     self.selectedList:removeItemByIndex(selectedIndex)
     
     -- MantÃ©m a seleÃ§Ã£o
@@ -363,7 +363,7 @@ function SmartFilterCreatorUI:onClickSave()
     local modData = getPlayer():getModData()
     modData.SmartFilters = modData.SmartFilters or {}
     
-    -- Se o nome jÃ¡ existe E nÃ£o somos nÃ³s prÃ³prios a editar o nosso nome para o mesmo
+    -- If name jÃ¡ existe E nÃ£o somos nÃ³s prÃ³prios a editar o nosso nome para o mesmo
     if modData.SmartFilters[filterName] and self.editFilterName ~= filterName then
         local modal = ISModalDialog:new(0, 0, 250, 150, "A filter named '" .. filterName .. "' already exists. Overwrite?", true, self, SmartFilterCreatorUI.onConfirmOverwrite)
         modal.filterNameToSave = filterName
@@ -403,7 +403,7 @@ function SmartFilterCreatorUI:performSave(filterName)
     local modData = getPlayer():getModData()
     modData.SmartFilters = modData.SmartFilters or {}
     
-    -- Se editÃ¡mos o nome, apagamos o filtro antigo!
+    -- If editedÃ¡mos o nome, apagamos o filtro antigo!
     if self.editFilterName and self.editFilterName ~= filterName then
         modData.SmartFilters[self.editFilterName] = nil
     end
@@ -468,7 +468,7 @@ function SmartFilterCreatorUI:onClickColorPick()
 end
 
 function SmartFilterCreatorUI:onColorPicked(color, mouseUp)
-    -- O Zomboid retorna um ColorInfo object que usa funÃ§Ãµes getR(), getG(), getB()
+    -- Zomboid returns a ColorInfo object usingÃ§Ãµes getR(), getG(), getB()
     local r = color.r or (color.getR and color:getR()) or 1
     local g = color.g or (color.getG and color:getG()) or 1
     local b = color.b or (color.getB and color:getB()) or 1
@@ -505,7 +505,7 @@ function SmartFilterCreatorUI:onSearchEntered(entry)
             if string.find(displayName, query, 1, true) or string.find(fullName, query, 1, true) then
                 self.searchDropdown:addItem(rawName or fullName, scriptItem)
                 added = added + 1
-                if added > 50 then break end -- Limite para não crashar
+                if added > 50 then break end -- Limit to prevent crash
             end
         end
     end
