@@ -24,16 +24,19 @@ In the Player Tab, you have options to **Create a New Filter**, **Edit a Filter*
 ![img](https://i.imgur.com/sc0fZV0.png)
 
 **Creating a New Filter:**
+
 In this menu, you can build your custom filter by adding specific categories or exact items. 
 *Tip: You can drag and drop items straight from your inventory into the search bar to add them instantly!*
 Finally, pick a custom **Highlight Color** and choose whether the filter should apply to categories, specific items, or both.
 ![img](https://i.imgur.com/0hVcYSE.png)
 
 **Managing Your Filters:**
+
 Easily edit or delete your existing filters.
 ![img](https://i.imgur.com/FDvjzxx.png)
 
 **The Edit Panel:**
+
 ![img](https://i.imgur.com/eGZplg3.png)
 
 ### Color Highlights
