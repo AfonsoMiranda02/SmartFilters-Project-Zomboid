@@ -2,5 +2,5 @@ version=1
 id=
 title=Smart Filter
 description=A powerful Quality of Life (QoL) mod that introduces real-time inventory searching, dynamic smart categories, and a custom filter creator with color highlights to drastically improve your inventory management experience.
-tags=Interface,Inventory,Quality of Life
+tags=Build 42,Interface,Items,QoL,Multiplayer
 visibility=public
