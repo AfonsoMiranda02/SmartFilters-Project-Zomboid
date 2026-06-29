@@ -1,40 +1,59 @@
 A powerful Quality of Life (QoL) mod that introduces real-time inventory searching, dynamic smart categories, and a custom filter creator with color highlights to drastically improve your inventory management experience.
 
-[h2]What is waiting for you when you install this mod[/h2]
-This second icon now has a new function instead of just Encumbrance now it has a new filter option
+[h2]✨ Features & How It Works[/h2]
+
+The vanilla Encumbrance icon now has a brand new function: [b]Filtering![/b]
 [img]https://i.imgur.com/COLOQUE_AQUI_O_LINK_PARA_Image1.png[/img]
-You click that filter icon and a new option Filter appears
+
+Clicking that icon reveals a new [b]Filter[/b] option.
 [img]https://i.imgur.com/COLOQUE_AQUI_O_LINK_PARA_Image 2.png[/img]
-And there you got 3 options Zomboid, for Project Zomboid categories(Works with other mods too), the Player where you will be able to create your own filters and a button to clear them
+
+From here, you get access to three main menus: 
+- [b]Zomboid:[/b] Automatically generates categories based ONLY on the items currently inside the container (fully compatible with other mods!).
+- [b]Player:[/b] Allows you to create, edit, and apply your own custom filters.
+- [b]Clear Filters:[/b] Instantly removes any active filter.
 [img]https://i.imgur.com/COLOQUE_AQUI_O_LINK_PARA_Image 3.png[/img]
 
-[b]The Zomboid tab looks like this in a container with various items from different categories[/b]
+[b]The Zomboid tab dynamically organizing a messy container with various items:[/b]
 [img]https://i.imgur.com/COLOQUE_AQUI_O_LINK_PARA_Image 4.png[/img]
 
-Then in the Player Tab you gonna have some options, one to create your own filter other to edit the filters you have, one to highlight your filter in the game containers and then you gonna have your own filters to activate.
+[h3]🛠️ Custom Player Filters[/h3]
+In the Player Tab, you have options to [b]Create a New Filter[/b], [b]Edit a Filter[/b], toggle [b]Highlights[/b], and quickly apply any of your saved filters.
 [img]https://i.imgur.com/COLOQUE_AQUI_O_LINK_PARA_Image 5.png[/img]
-[b]This is what the Create a New Filter tab looks like[/b]
-In this tab you can create your filter and add or remove categories or specific items(you can also drag items from your inventory to the searchbar and they will be added to the list) and then choose the color if you want to highlight them and at the end choose if you want this time to use this filter for a list of categories or items or a categories and items.
+
+[b]Creating a New Filter:[/b]
+In this menu, you can build your custom filter by adding specific categories or exact items. 
+[i]Tip: You can drag and drop items straight from your inventory into the search bar to add them instantly![/i]
+Finally, pick a custom [b]Highlight Color[/b] and choose whether the filter should apply to categories, specific items, or both.
 [img]https://i.imgur.com/COLOQUE_AQUI_O_LINK_PARA_Image 6.png[/img]
 
-[b]This is what the Edit a Filter tab looks like[/b]
+[b]Managing Your Filters:[/b]
+Easily edit or delete your existing filters.
 [img]https://i.imgur.com/COLOQUE_AQUI_O_LINK_PARA_Image 7.png[/img]
-[b]This is what the Edit Panel looks like[/b]
+
+[b]The Edit Panel:[/b]
 [img]https://i.imgur.com/COLOQUE_AQUI_O_LINK_PARA_Image 8.png[/img]
-Then you got the Highlight feature that you can turn on and off, and it will put a highlight color in the items you selected or in the items from the category you selected
-[b]The ON and OFF buttons[/b]
+
+[h3]🎨 Color Highlights[/h3]
+The Highlight feature allows you to toggle custom background colors for specific items or categories across all game containers, making your most important loot instantly recognizable!
+
+[b]Toggle Highlights ON or OFF seamlessly:[/b]
 [img]https://i.imgur.com/COLOQUE_AQUI_O_LINK_PARA_Image 9.png[/img]
-[b]And this is how a item should look like when highlighted[/b]
+
+[b]This is how your items look when highlighted in the inventory:[/b]
 [img]https://i.imgur.com/COLOQUE_AQUI_O_LINK_PARA_Image 10.png[/img]
 
-And you got a search bar too on the top of your inventory and any container inventory
-[b]Player Inventory[/b]
+[h3]🔍 Real-Time Search Bar[/h3]
+Lost an item? Not anymore! A brand new Search Bar is seamlessly integrated at the top of every inventory window. 
+
+[b]Player Inventory Search:[/b]
 [img]https://i.imgur.com/COLOQUE_AQUI_O_LINK_PARA_Image 11.png[/img]
-[b]Container Inventory[/b]
+
+[b]Container Inventory Search:[/b]
 [img]https://i.imgur.com/COLOQUE_AQUI_O_LINK_PARA_Image 12.png[/img]
 
-[h1]Known Issues[/h1]
-To this moment i havent found any problems with this mod neither one got reported
+[h2]🐛 Known Issues[/h2]
+None so far! The mod has been built from the ground up for Build 42. If you find any bugs, please report them in the comments.
 
-[h1]Multiplayer[/h1]
-I havent tested but it should work
+[h2]🌐 Multiplayer[/h2]
+The mod has been developed with multiplayer in mind and should work perfectly on servers.
