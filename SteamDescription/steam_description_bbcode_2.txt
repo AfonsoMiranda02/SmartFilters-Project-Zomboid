@@ -1,0 +1,81 @@
+A powerful Quality of Life (QoL) mod that introduces real-time inventory searching, dynamic smart categories, and a custom filter creator with color highlights to drastically improve your inventory management experience.
+
+[h2]Features & How It Works[/h2]
+
+The vanilla Encumbrance icon now has a brand new function: [b]Filtering![/b]
+
+[img]https://i.imgur.com/JRj78qD.png[/img]
+
+Clicking that icon reveals a new [b]Filter[/b] option.
+
+[img]https://i.imgur.com/d0jV4XP.png[/img]
+
+From here, you get access to three main menus: 
+- [b]Zomboid:[/b] Automatically generates categories based ONLY on the items currently inside the container (fully compatible with other mods!).
+- [b]Player:[/b] Allows you to create, edit, and apply your own custom filters.
+- [b]Clear Filters:[/b] Instantly removes any active filter.
+
+[img]https://i.imgur.com/tDxLkUN.png[/img]
+
+[b]The Zomboid tab dynamically organizing a messy container with various items:[/b]
+
+[img]https://i.imgur.com/fCHqZP4.png[/img]
+
+[h3]Custom Player Filters[/h3]
+In the Player Tab, you have options to [b]Create a New Filter[/b], [b]Edit a Filter[/b], toggle [b]Highlights[/b], and quickly apply any of your saved filters.
+
+[img]https://i.imgur.com/sc0fZV0.png[/img]
+
+[b]Creating a New Filter:[/b]
+
+In this menu, you can build your custom filter by adding specific categories or exact items. 
+[i]Tip: You can drag and drop items straight from your inventory into the search bar to add them instantly![/i]
+Finally, pick a custom [b]Highlight Color[/b] and choose whether the filter should apply to categories, specific items, or both.
+
+[img]https://i.imgur.com/0hVcYSE.png[/img]
+
+[b]Managing Your Filters:[/b]
+
+Easily edit or delete your existing filters.
+
+[img]https://i.imgur.com/FDvjzxx.png[/img]
+
+[b]The Edit Panel:[/b]
+
+[img]https://i.imgur.com/eGZplg3.png[/img]
+
+[h3]Save Persistence (New!)[/h3]
+Your custom filters are now saved globally per-world! Instead of being tied to your specific character, the mod writes your custom filters to a secure file dedicated to your current save game (`SmartFilter_YourSaveName.lua`). 
+
+This means that if your character dies, your custom filters and highlights will still be there waiting for you when you respawn with a new character in the same world!
+
+[h3]Color Highlights[/h3]
+The Highlight feature allows you to toggle custom background colors for specific items or categories across all game containers, making your most important loot instantly recognizable!
+
+[b]Toggle Highlights ON or OFF seamlessly:[/b]
+
+[img]https://i.imgur.com/q9Lllof.png[/img]
+
+[b]This is how your items look when highlighted in the inventory:[/b]
+
+[img]https://i.imgur.com/mkB0Xpb.png[/img]
+
+[h3]Real-Time Search Bar[/h3]
+Lost an item? Not anymore! A brand new Search Bar is seamlessly integrated at the top of every inventory window. 
+
+[b]Player Inventory Search:[/b]
+
+[img]https://i.imgur.com/pGvNyRM.png[/img]
+
+[b]Container Inventory Search:[/b]
+
+[img]https://i.imgur.com/M78C6iM.png[/img]
+
+[h2]Localization[/h2]
+Smart Filter supports 27 languages out of the box! The UI will automatically adapt to your game's language settings.
+
+[h2]Known Issues[/h2]
+None so far! The mod has been built from the ground up for Build 42. If you find any bugs, please report them in the comments.
+
+[h2]Multiplayer[/h2]
+The mod has been developed with multiplayer in mind and should work perfectly on servers.
