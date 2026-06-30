@@ -23,9 +23,9 @@ if not SmartFilter.original_ISContextMenu_onMouseUp then
                         for _, sibling in ipairs(self.options) do
                             if sibling.isHighlightToggle and sibling.param1 == option.param1 then
                                 if sibling.param2 == true then
-                                    sibling.name = isOnOpt and "[V] ON" or "ON"
+                                    sibling.name = isOnOpt and getText("IGUI_SmartFilter_MenuON_V") or getText("IGUI_SmartFilter_MenuON")
                                 else
-                                    sibling.name = not isOnOpt and "[V] OFF" or "OFF"
+                                    sibling.name = not isOnOpt and getText("IGUI_SmartFilter_MenuOFF_V") or getText("IGUI_SmartFilter_MenuOFF")
                                 end
                             end
                         end
@@ -50,22 +50,22 @@ function ISInventoryPane:onFilterMenu(button)
     if context then
         
         local filterSubMenu = ISContextMenu:getNew(context)
-        context:addSubMenu(context:addOption("Filter", nil, nil), filterSubMenu)
+        context:addSubMenu(context:addOption(getText("IGUI_SmartFilter_MenuFilter"), nil, nil), filterSubMenu)
         
         local zomboidSubMenu = ISContextMenu:getNew(filterSubMenu)
-        filterSubMenu:addSubMenu(filterSubMenu:addOption("Zomboid", nil, nil), zomboidSubMenu)
+        filterSubMenu:addSubMenu(filterSubMenu:addOption(getText("IGUI_SmartFilter_MenuZomboid"), nil, nil), zomboidSubMenu)
         
         local playerSubMenu = ISContextMenu:getNew(filterSubMenu)
-        filterSubMenu:addSubMenu(filterSubMenu:addOption("Player", nil, nil), playerSubMenu)
+        filterSubMenu:addSubMenu(filterSubMenu:addOption(getText("IGUI_SmartFilter_MenuPlayer"), nil, nil), playerSubMenu)
 
-        filterSubMenu:addOption("Clear Filters", self, SmartFilter.applyFilter, "All")
+        filterSubMenu:addOption(getText("IGUI_SmartFilter_MenuClearFilters"), self, SmartFilter.applyFilter, getText("IGUI_SmartFilter_MenuAll"))
 
-        playerSubMenu:addOption("Create a New Filter", nil, SmartFilter.openCreatorUI, nil)
+        playerSubMenu:addOption(getText("IGUI_SmartFilter_MenuCreateNew"), nil, SmartFilter.openCreatorUI, nil)
         
-        playerSubMenu:addOption("Edit a Filter", nil, SmartFilter.openManagerUI, nil)
+        playerSubMenu:addOption(getText("IGUI_SmartFilter_MenuEdit"), nil, SmartFilter.openManagerUI, nil)
         
         local highlightsSubMenu = ISContextMenu:getNew(playerSubMenu)
-        playerSubMenu:addSubMenu(playerSubMenu:addOption("Highlights", nil, nil), highlightsSubMenu)
+        playerSubMenu:addSubMenu(playerSubMenu:addOption(getText("IGUI_SmartFilter_MenuHighlights"), nil, nil), highlightsSubMenu)
         
         local smartFilters = SmartFilterSettings.getFilters()
         if smartFilters then
@@ -76,14 +76,14 @@ function ISInventoryPane:onFilterMenu(button)
                 
                 local isOn = fData.highlightActive
                 
-                local onText = "ON"
-                if isOn then onText = "[V] ON" end
+                local onText = getText("IGUI_SmartFilter_MenuON")
+                if isOn then onText = getText("IGUI_SmartFilter_MenuON_V") end
                 local onOpt = filterHighlightSub:addOption(onText, nil, SmartFilter.toggleHighlight, fName, true)
                 onOpt.keepMenuOpen = true
                 onOpt.isHighlightToggle = true
                 
-                local offText = "OFF"
-                if not isOn then offText = "[V] OFF" end
+                local offText = getText("IGUI_SmartFilter_MenuOFF")
+                if not isOn then offText = getText("IGUI_SmartFilter_MenuOFF_V") end
                 local offOpt = filterHighlightSub:addOption(offText, nil, SmartFilter.toggleHighlight, fName, false)
                 offOpt.keepMenuOpen = true
                 offOpt.isHighlightToggle = true
@@ -96,7 +96,7 @@ function ISInventoryPane:onFilterMenu(button)
             end
         end
 
-        zomboidSubMenu:addOption("All", self, SmartFilter.applyFilter, "All")
+        zomboidSubMenu:addOption(getText("IGUI_SmartFilter_MenuAll"), self, SmartFilter.applyFilter, getText("IGUI_SmartFilter_MenuAll"))
         
         -- [Dynamic Categories] Reads the current inventory and dynamically 
         -- generates filter options based only on what the player actually has.
@@ -255,7 +255,7 @@ function SmartFilter.deleteFilter(target, filterName, pane)
         smartFilters[filterName] = nil
         SmartFilterSettings.saveFilters()
         if pane and pane.smartFilterActive == filterName then
-            pane.smartFilterActive = "All"
+            pane.smartFilterActive = getText("IGUI_SmartFilter_MenuAll")
             pane:refreshContainer()
         end
     end
@@ -272,7 +272,7 @@ end
 function ISInventoryPane:refreshContainer()
     SmartFilter.original_refreshContainer(self)
     
-    local hasFilter = (self.smartFilterActive and self.smartFilterActive ~= "All")
+    local hasFilter = (self.smartFilterActive and self.smartFilterActive ~= getText("IGUI_SmartFilter_MenuAll"))
     local hasSearch = (self.smartSearchText and self.smartSearchText ~= "")
     
     if hasFilter or hasSearch then
@@ -369,7 +369,7 @@ function ISInventoryPage:createChildren()
     
     self.smartSearchBar = ISTextEntryBox:new("", startX, 1, barWidth, buttonHeight)
     self.smartSearchBar.font = UIFont.Small
-    self.smartSearchBar.tooltip = "Search items by name or ID..."
+    self.smartSearchBar.tooltip = getText("IGUI_SmartFilter_SearchTooltip")
     self.smartSearchBar:initialise()
     self.smartSearchBar:instantiate()
     

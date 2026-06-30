@@ -14,7 +14,7 @@ function SmartFilterManagerUI:createChildren()
     local titleHeight = getTextManager():getFontHeight(UIFont.Medium)
     
     -- [Title Label]
-    self.titleLabel = ISLabel:new(self.width / 2, margin, titleHeight, "Edit Filters", 1, 1, 1, 1, UIFont.Medium, true)
+    self.titleLabel = ISLabel:new(self.width / 2, margin, titleHeight, getText("IGUI_SmartFilter_ManagerTitle"), 1, 1, 1, 1, UIFont.Medium, true)
     self.titleLabel.center = true
     self:addChild(self.titleLabel)
     
@@ -37,20 +37,20 @@ function SmartFilterManagerUI:createChildren()
     local btnY = self.height - btnHeight - margin
     local btnWidth = 80
     
-    self.btnEdit = ISButton:new(margin, btnY, btnWidth, btnHeight, "Edit", self, SmartFilterManagerUI.onClickEdit)
+    self.btnEdit = ISButton:new(margin, btnY, btnWidth, btnHeight, getText("IGUI_SmartFilter_ManagerEdit"), self, SmartFilterManagerUI.onClickEdit)
     self.btnEdit:initialise()
     self.btnEdit:instantiate()
     self.btnEdit.borderColor = {r=1, g=1, b=1, a=0.3}
     self:addChild(self.btnEdit)
     
-    self.btnDelete = ISButton:new(margin + btnWidth + 10, btnY, btnWidth, btnHeight, "Delete", self, SmartFilterManagerUI.onClickDelete)
+    self.btnDelete = ISButton:new(margin + btnWidth + 10, btnY, btnWidth, btnHeight, getText("IGUI_SmartFilter_ManagerDelete"), self, SmartFilterManagerUI.onClickDelete)
     self.btnDelete:initialise()
     self.btnDelete:instantiate()
     self.btnDelete.borderColor = {r=1, g=0, b=0, a=0.5}
     self.btnDelete.textColor = {r=1, g=0.3, b=0.3, a=1}
     self:addChild(self.btnDelete)
     
-    self.btnCancel = ISButton:new(self.width - btnWidth - margin, btnY, btnWidth, btnHeight, "Cancel", self, SmartFilterManagerUI.close)
+    self.btnCancel = ISButton:new(self.width - btnWidth - margin, btnY, btnWidth, btnHeight, getText("IGUI_SmartFilter_CreatorCancel"), self, SmartFilterManagerUI.close)
     self.btnCancel:initialise()
     self.btnCancel:instantiate()
     self.btnCancel.borderColor = {r=1, g=1, b=1, a=0.3}
@@ -96,7 +96,7 @@ function SmartFilterManagerUI:onClickDelete()
     if selectedItem then
         local filterName = selectedItem.item
         -- Native dialog confirmation
-        local modal = ISModalDialog:new(self:getAbsoluteX() + 50, self:getAbsoluteY() + 50, 300, 150, "Are you sure you want to delete this category: " .. filterName .. "?", true, self, SmartFilterManagerUI.onConfirmDelete, nil, filterName)
+        local modal = ISModalDialog:new(self:getAbsoluteX() + 50, self:getAbsoluteY() + 50, 300, 150, getText("IGUI_SmartFilter_ManagerConfirmDelete", filterName), true, self, SmartFilterManagerUI.onConfirmDelete, nil, filterName)
         modal:initialise()
         modal:addToUIManager()
     end

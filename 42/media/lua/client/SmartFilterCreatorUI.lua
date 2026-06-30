@@ -21,7 +21,7 @@ function SmartFilterCreatorUI:createChildren()
     self.nameLabel = ISLabel:new(margin, y, fontHeight, "Filter Name:", 1, 1, 1, 1, UIFont.Small, true)
     self:addChild(self.nameLabel)
     
-    self.nameEntry = ISTextEntryBox:new("My Custom Filter", margin + 80, y, 200, btnHeight)
+    self.nameEntry = ISTextEntryBox:new(getText("IGUI_SmartFilter_CreatorDefaultName"), margin + 80, y, 200, btnHeight)
     self.nameEntry:initialise()
     self.nameEntry:instantiate()
     self:addChild(self.nameEntry)
@@ -33,10 +33,10 @@ function SmartFilterCreatorUI:createChildren()
     local btnX = margin + listWidth + margin
     local selectedX = btnX + 40 + margin
     
-    self.availLabel = ISLabel:new(margin, y, fontHeight, "Available:", 1, 1, 1, 1, UIFont.Small, true)
+    self.availLabel = ISLabel:new(margin, y, fontHeight, getText("IGUI_SmartFilter_CreatorAvailable"), 1, 1, 1, 1, UIFont.Small, true)
     self:addChild(self.availLabel)
     
-    self.selLabel = ISLabel:new(selectedX, y, fontHeight, "Selected:", 1, 1, 1, 1, UIFont.Small, true)
+    self.selLabel = ISLabel:new(selectedX, y, fontHeight, getText("IGUI_SmartFilter_CreatorSelected"), 1, 1, 1, 1, UIFont.Small, true)
     self:addChild(self.selLabel)
     
     y = y + fontHeight + 5
@@ -156,8 +156,8 @@ function SmartFilterCreatorUI:createChildren()
     self.tickBox = ISTickBox:new(margin, y, 200, btnHeight, "", self, SmartFilterCreatorUI.onTickBox)
     self.tickBox:initialise()
     self.tickBox:instantiate()
-    self.tickBox:addOption("Filter by Category")
-    self.tickBox:addOption("Filter by Specific Items")
+    self.tickBox:addOption(getText("IGUI_SmartFilter_CreatorUseCat"))
+    self.tickBox:addOption(getText("IGUI_SmartFilter_CreatorUseItems"))
     self.tickBox.selected[1] = true -- Usa a propriedade interna para forÃ§ar o visto
     self.tickBox.selected[2] = false
     self:addChild(self.tickBox)
@@ -169,7 +169,7 @@ function SmartFilterCreatorUI:createChildren()
     self.btnSave:instantiate()
     self:addChild(self.btnSave)
     
-    self.btnCancel = ISButton:new(self.width/2 + 10, y, 50, btnHeight, "Cancel", self, SmartFilterCreatorUI.close)
+    self.btnCancel = ISButton:new(self.width/2 + 10, y, 50, btnHeight, getText("IGUI_SmartFilter_CreatorCancel"), self, SmartFilterCreatorUI.close)
     self.btnCancel:initialise()
     self.btnCancel:instantiate()
     self:addChild(self.btnCancel)
@@ -356,15 +356,15 @@ end
 
 function SmartFilterCreatorUI:onClickSave()
     local filterName = self.nameEntry:getText()
-    if filterName == "" or filterName == "My Custom Filter" then 
-        filterName = "New Filter " .. ZombRand(100)
+    if filterName == "" or filterName == getText("IGUI_SmartFilter_CreatorDefaultName") then 
+        filterName = getText("IGUI_SmartFilter_MenuCreateNew") .. " " .. ZombRand(100)
     end
     
     local smartFilters = SmartFilterSettings.getFilters()
     
     -- If name jÃ¡ existe E nÃ£o somos nÃ³s prÃ³prios a editar o nosso nome para o mesmo
     if smartFilters[filterName] and self.editFilterName ~= filterName then
-        local modal = ISModalDialog:new(0, 0, 250, 150, "A filter named '" .. filterName .. "' already exists. Overwrite?", true, self, SmartFilterCreatorUI.onConfirmOverwrite)
+        local modal = ISModalDialog:new(0, 0, 250, 150, getText("IGUI_SmartFilter_CreatorOverwrite", filterName), true, self, SmartFilterCreatorUI.onConfirmOverwrite)
         modal.filterNameToSave = filterName
         modal:initialise()
         modal:addToUIManager()
