@@ -202,8 +202,8 @@ function SmartFilterCreatorUI:createChildren()
     -- EDIT MODE: Preload data if editing
     -- -------------------------------------------------------------------------
     if self.editFilterName then
-        local modData = getPlayer():getModData()
-        local fData = modData.SmartFilters and modData.SmartFilters[self.editFilterName]
+        local smartFilters = SmartFilterSettings.getFilters()
+        local fData = smartFilters and smartFilters[self.editFilterName]
         if fData then
             self.nameEntry:setText(self.editFilterName)
             if fData.specificItems and fData.specificItems ~= "" then
@@ -360,11 +360,10 @@ function SmartFilterCreatorUI:onClickSave()
         filterName = "New Filter " .. ZombRand(100)
     end
     
-    local modData = getPlayer():getModData()
-    modData.SmartFilters = modData.SmartFilters or {}
+    local smartFilters = SmartFilterSettings.getFilters()
     
     -- If name jÃ¡ existe E nÃ£o somos nÃ³s prÃ³prios a editar o nosso nome para o mesmo
-    if modData.SmartFilters[filterName] and self.editFilterName ~= filterName then
+    if smartFilters[filterName] and self.editFilterName ~= filterName then
         local modal = ISModalDialog:new(0, 0, 250, 150, "A filter named '" .. filterName .. "' already exists. Overwrite?", true, self, SmartFilterCreatorUI.onConfirmOverwrite)
         modal.filterNameToSave = filterName
         modal:initialise()
@@ -400,12 +399,11 @@ function SmartFilterCreatorUI:performSave(filterName)
     local useCategories = self.tickBox:isSelected(1)
     local useItems = self.tickBox:isSelected(2)
     
-    local modData = getPlayer():getModData()
-    modData.SmartFilters = modData.SmartFilters or {}
+    local smartFilters = SmartFilterSettings.getFilters()
     
     -- If editedÃ¡mos o nome, apagamos o filtro antigo!
     if self.editFilterName and self.editFilterName ~= filterName then
-        modData.SmartFilters[self.editFilterName] = nil
+        smartFilters[self.editFilterName] = nil
     end
     
     local filterData = {
@@ -419,7 +417,8 @@ function SmartFilterCreatorUI:performSave(filterName)
         isPlayerFilter = true
     }
     
-    modData.SmartFilters[filterName] = filterData
+    smartFilters[filterName] = filterData
+    SmartFilterSettings.saveFilters()
     
     self:close()
     

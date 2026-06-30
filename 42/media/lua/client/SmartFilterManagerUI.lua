@@ -59,9 +59,9 @@ end
 
 function SmartFilterManagerUI:populateList()
     self.filterList:clear()
-    local modData = getPlayer():getModData()
-    if modData.SmartFilters then
-        for fName, fData in pairs(modData.SmartFilters) do
+    local smartFilters = SmartFilterSettings.getFilters()
+    if smartFilters then
+        for fName, fData in pairs(smartFilters) do
             self.filterList:addItem(fName, fName)
         end
     end

@@ -67,9 +67,9 @@ function ISInventoryPane:onFilterMenu(button)
         local highlightsSubMenu = ISContextMenu:getNew(playerSubMenu)
         playerSubMenu:addSubMenu(playerSubMenu:addOption("Highlights", nil, nil), highlightsSubMenu)
         
-        local modData = getPlayer():getModData()
-        if modData.SmartFilters then
-            for fName, fData in pairs(modData.SmartFilters) do
+        local smartFilters = SmartFilterSettings.getFilters()
+        if smartFilters then
+            for fName, fData in pairs(smartFilters) do
                 local filterHighlightSub = ISContextMenu:getNew(highlightsSubMenu)
                 local opt = highlightsSubMenu:addOption(fName, nil, nil)
                 highlightsSubMenu:addSubMenu(opt, filterHighlightSub)
@@ -90,8 +90,8 @@ function ISInventoryPane:onFilterMenu(button)
             end
         end
 
-        if modData.SmartFilters then
-            for fName, fData in pairs(modData.SmartFilters) do
+        if smartFilters then
+            for fName, fData in pairs(smartFilters) do
                 playerSubMenu:addOption(fName, self, SmartFilter.applyFilter, fData)
             end
         end
@@ -167,11 +167,11 @@ if not SmartFilter.original_render then
 end
 
 function ISInventoryPane:render()
-    local modData = getPlayer():getModData()
+    local smartFilters = SmartFilterSettings.getFilters()
     local activeFilters = {}
     
-    if self.mode == "details" and self.itemslist and modData and modData.SmartFilters then
-        for fName, fData in pairs(modData.SmartFilters) do
+    if self.mode == "details" and self.itemslist and smartFilters then
+        for fName, fData in pairs(smartFilters) do
             if fData.highlightActive then
                 table.insert(activeFilters, fData)
             end
@@ -242,16 +242,18 @@ function ISInventoryPane:checkAndDrawHighlight(item, y, activeFilters)
 end
 
 function SmartFilter.toggleHighlight(target, filterName, state)
-    local modData = getPlayer():getModData()
-    if modData.SmartFilters and modData.SmartFilters[filterName] then
-        modData.SmartFilters[filterName].highlightActive = state
+    local smartFilters = SmartFilterSettings.getFilters()
+    if smartFilters and smartFilters[filterName] then
+        smartFilters[filterName].highlightActive = state
+        SmartFilterSettings.saveFilters()
     end
 end
 
 function SmartFilter.deleteFilter(target, filterName, pane)
-    local modData = getPlayer():getModData()
-    if modData.SmartFilters and modData.SmartFilters[filterName] then
-        modData.SmartFilters[filterName] = nil
+    local smartFilters = SmartFilterSettings.getFilters()
+    if smartFilters and smartFilters[filterName] then
+        smartFilters[filterName] = nil
+        SmartFilterSettings.saveFilters()
         if pane and pane.smartFilterActive == filterName then
             pane.smartFilterActive = "All"
             pane:refreshContainer()
